@@ -1,37 +1,57 @@
-export function playerAttack(){
-window.playerAttack = () => {
-        if (!isPlayerTurn || playerHP <= 0 || enemyHP <= 0) return;
-        isPlayerTurn = false;
-        updateArrow();
+export function playerAttack({ 
+  isPlayerTurn, 
+  setIsPlayerTurn, 
+  enemyHP, 
+  setEnemyHP, 
+  enemy, 
+  startQTE, 
+  showMessage, 
+  resultText, 
+  updateArrow 
+}) {
+  if (!isPlayerTurn || enemyHP <= 0) return;
 
-        startQTE((result) => {
-          setTimeout(() => {
-            const dmg = result === "perfect" ? 40 : result === "good" ? 30 : 20;
-            enemyHP -= dmg;
-            console.log(enemy.material.diffuseColor)
-            enemy.material.diffuseColor = result === "perfect" ? BABYLON.Color3.Yellow() : BABYLON.Color3.Red();
-            setTimeout(() => enemy.material.diffuseColor = BABYLON.Color3.White(), 300);
+  setIsPlayerTurn(false);
+  updateArrow();
 
-            if (result !== "fail") showMessage("Coup critique !", "gold");
+  startQTE((result) => {
+    setTimeout(() => {
+      const dmg = result === "perfect" ? 40 : result === "good" ? 30 : 20;
+      const newEnemyHP = Math.max(0, enemyHP - dmg);
+      setEnemyHP(newEnemyHP);
 
-            if (enemyHP <= 0) {
-              resultText.innerHTML = "Vous avez gagné !";
-              resultText.style.display = 'block';
-            } else {
-            }
-          }, 100);
-        });
-      };
+      enemy.material.diffuseColor = result === "perfect" ? BABYLON.Color3.Yellow() : BABYLON.Color3.Red();
+      setTimeout(() => enemy.material.diffuseColor = BABYLON.Color3.White(), 300);
 
-      window.healPlayer = () => {
-        if (!isPlayerTurn || playerHP <= 0) return;
-        isPlayerTurn = false;
-        updateArrow();
-        setTimeout(() => {
-          playerHP = Math.min(100, playerHP + 15);
-          player.material.diffuseColor = BABYLON.Color3.Green();
-          setTimeout(() => player.material.diffuseColor = BABYLON.Color3.White(), 300);
-          updateHP();
-        }, 100);
-      };
-    }
+      if (result !== "fail") showMessage("Coup critique !", "gold");
+
+      if (newEnemyHP <= 0) {
+        resultText.innerHTML = "Vous avez gagné !";
+        resultText.style.display = 'block';
+      }
+    }, 100);
+  });
+}
+
+export function healPlayer({ 
+  isPlayerTurn, 
+  setIsPlayerTurn, 
+  playerHP, 
+  setPlayerHP, 
+  player, 
+  updateHP, 
+  updateArrow 
+}) {
+  if (!isPlayerTurn || playerHP <= 0) return;
+
+  setIsPlayerTurn(false);
+  updateArrow();
+
+  setTimeout(() => {
+    const newHP = Math.min(100, playerHP + 15);
+    setPlayerHP(newHP);
+    player.material.diffuseColor = BABYLON.Color3.Green();
+    setTimeout(() => player.material.diffuseColor = BABYLON.Color3.White(), 300);
+    updateHP();
+  }, 100);
+}
