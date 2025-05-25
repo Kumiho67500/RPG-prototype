@@ -18,7 +18,6 @@ window.playerAttack = () => {
               resultText.innerHTML = "Vous avez gagné !";
               resultText.style.display = 'block';
             } else {
-              enemyAttack();
             }
           }, 100);
         });
@@ -33,7 +32,6 @@ window.playerAttack = () => {
           player.material.diffuseColor = BABYLON.Color3.Green();
           setTimeout(() => player.material.diffuseColor = BABYLON.Color3.White(), 300);
           updateHP();
-          enemyAttack();
         }, 100);
       };
     }
