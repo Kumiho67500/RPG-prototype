@@ -62,6 +62,7 @@ const createScene = function () {
 
     let start = performance.now();
     const duration = 750;
+    const duration = 2000;
     let direction = 1;
 
     let animationId;
@@ -83,6 +84,7 @@ const createScene = function () {
       animationId = requestAnimationFrame(animate);
     }
 
+<<<<<<< HEAD
   function endQTE(result) {
     const resultDiv = document.getElementById("qte-result");
     if (result === "perfect") {
@@ -102,6 +104,23 @@ const createScene = function () {
       else return endQTE("fail");
     }
   }
+=======
+    function endQTE(result) {
+      cancelAnimationFrame(animationId);
+      container.style.display = "none";
+      window.removeEventListener("keydown", onKey);
+      callback(result);
+    }
+
+    function onKey(e) {
+      if (e.code === "Space") {
+        const x = parseFloat(bar.style.left);
+        if (x >= 130 && x <= 170) return endQTE("perfect");
+        else if (x >= 100 && x <= 200) return endQTE("good");
+        else return endQTE("fail");
+      }
+    }
+>>>>>>> 175c98378b532f7bdb585849cc7f043700da104f
 
     window.addEventListener("keydown", onKey);
     animate();
@@ -120,7 +139,12 @@ const createScene = function () {
     player, updateHP, updateArrow
   });
 
+<<<<<<< HEAD
   window.startEnemyTurn = () => {{
+=======
+  window.startEnemyTurn = () => {
+    startQTE((result) => {
+>>>>>>> 175c98378b532f7bdb585849cc7f043700da104f
       const damage = ennemyAttack(result, showMessage);
       playerHP -= damage;
       updateHP();
@@ -132,6 +156,7 @@ const createScene = function () {
         isPlayerTurn = true;
         updateArrow();
       }
+<<<<<<< HEAD
     };
   };
 
@@ -139,6 +164,11 @@ const createScene = function () {
     if (e.key === 'a' || e.key === 'A') window.endQTE();
   });
 
+=======
+    });
+  };
+
+>>>>>>> 175c98378b532f7bdb585849cc7f043700da104f
   window.addEventListener('keydown', e => {
     if (e.key === 'a' || e.key === 'A') window.attackEnemy();
     if (e.key === 'w' || e.key === 'W') window.healPlayer();
