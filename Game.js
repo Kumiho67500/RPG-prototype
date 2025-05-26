@@ -60,10 +60,9 @@ const createScene = function () {
     container.style.display = "block";
     bar.style.left = "0px";
 
-    let start = performance.now();
-    const duration = 750;
-    const duration = 2000;
-    let direction = 1;
+        let start = performance.now();
+        const duration = 750;
+        let direction = 1;
 
     let animationId;
 
@@ -84,91 +83,38 @@ const createScene = function () {
       animationId = requestAnimationFrame(animate);
     }
 
-<<<<<<< HEAD
-  function endQTE(result) {
-    const resultDiv = document.getElementById("qte-result");
-    if (result === "perfect") {
-      resultDiv.textContent = "Splendide";
-    } else if (result === "good") {
-      resultDiv.textContent = "Passable";
-    } else if (result === "fail") {
-      resultDiv.textContent = "Médiocre";
-    }
-  }
+        function endQTE(result) {
+          cancelAnimationFrame(animationId);
+          container.style.display = "none";
+          window.removeEventListener("keydown", onKey);
+          callback(result);
+        }
 
-  function onKey(e) {
-    if (e.key === 'a' || e.key === 'A') {
-      const x = parseFloat(bar.style.left);
-      if (x >= 130 && x <= 170) return endQTE("perfect");
-      else if (x >= 100 && x <= 200) return endQTE("good");
-      else return endQTE("fail");
-    }
-  }
-=======
-    function endQTE(result) {
-      cancelAnimationFrame(animationId);
-      container.style.display = "none";
-      window.removeEventListener("keydown", onKey);
-      callback(result);
-    }
-
-    function onKey(e) {
-      if (e.code === "Space") {
-        const x = parseFloat(bar.style.left);
-        if (x >= 130 && x <= 170) return endQTE("perfect");
-        else if (x >= 100 && x <= 200) return endQTE("good");
-        else return endQTE("fail");
-      }
-    }
->>>>>>> 175c98378b532f7bdb585849cc7f043700da104f
+        function onKey(e) {
+          if (e.code === "Space") {
+            const x = parseFloat(bar.style.left);
+            if (x >= 130 && x <= 170) return endQTE("perfect");
+            else if (x >= 100 && x <= 200) return endQTE("good");
+            else return endQTE("fail");
+          }
+        }
 
     window.addEventListener("keydown", onKey);
     animate();
   }
 
-  window.attackEnemy = () => playerAttack({
-    isPlayerTurn, setIsPlayerTurn,
-    enemyHP, setEnemyHP,
-    enemy, startQTE, showMessage,
-    resultText, updateArrow
-  });
+          playerHP -= damage;
+          updateHP();
 
-  window.healPlayer = () => healPlayer({
-    isPlayerTurn, setIsPlayerTurn,
-    playerHP, setPlayerHP,
-    player, updateHP, updateArrow
-  });
+          if (playerHP <= 0) {
+            resultText.innerHTML = "Vous avez perdu !";
+            resultText.style.display = 'block';
+          } else {
+            isPlayerTurn = true;
+            updateArrow();
+          }
+        };
 
-<<<<<<< HEAD
-  window.startEnemyTurn = () => {{
-=======
-  window.startEnemyTurn = () => {
-    startQTE((result) => {
->>>>>>> 175c98378b532f7bdb585849cc7f043700da104f
-      const damage = ennemyAttack(result, showMessage);
-      playerHP -= damage;
-      updateHP();
-
-      if (playerHP <= 0) {
-        resultText.innerHTML = "Vous avez perdu !";
-        resultText.style.display = 'block';
-      } else {
-        isPlayerTurn = true;
-        updateArrow();
-      }
-<<<<<<< HEAD
-    };
-  };
-
-  window.addEventListener("keydown", onKey => {
-    if (e.key === 'a' || e.key === 'A') window.endQTE();
-  });
-
-=======
-    });
-  };
-
->>>>>>> 175c98378b532f7bdb585849cc7f043700da104f
   window.addEventListener('keydown', e => {
     if (e.key === 'a' || e.key === 'A') window.attackEnemy();
     if (e.key === 'w' || e.key === 'W') window.healPlayer();
@@ -178,7 +124,6 @@ const createScene = function () {
   updateHP();
 
   return scene;
-};
 
 const scene = createScene();
 engine.runRenderLoop(() => {
