@@ -61,7 +61,7 @@ const createScene = function () {
     bar.style.left = "0px";
 
     let start = performance.now();
-    const duration = 2000;
+    const duration = 750;
     let direction = 1;
 
     let animationId;
@@ -83,21 +83,25 @@ const createScene = function () {
       animationId = requestAnimationFrame(animate);
     }
 
-    function endQTE(result) {
-      cancelAnimationFrame(animationId);
-      container.style.display = "none";
-      window.removeEventListener("keydown", onKey);
-      callback(result);
+  function endQTE(result) {
+    const resultDiv = document.getElementById("qte-result");
+    if (result === "perfect") {
+      resultDiv.textContent = "Splendide";
+    } else if (result === "good") {
+      resultDiv.textContent = "Passable";
+    } else if (result === "fail") {
+      resultDiv.textContent = "Médiocre";
     }
+  }
 
-    function onKey(e) {
-      if (e.code === "Space") {
-        const x = parseFloat(bar.style.left);
-        if (x >= 130 && x <= 170) return endQTE("perfect");
-        else if (x >= 100 && x <= 200) return endQTE("good");
-        else return endQTE("fail");
-      }
+  function onKey(e) {
+    if (e.key === 'a' || e.key === 'A') {
+      const x = parseFloat(bar.style.left);
+      if (x >= 130 && x <= 170) return endQTE("perfect");
+      else if (x >= 100 && x <= 200) return endQTE("good");
+      else return endQTE("fail");
     }
+  }
 
     window.addEventListener("keydown", onKey);
     animate();
@@ -116,8 +120,7 @@ const createScene = function () {
     player, updateHP, updateArrow
   });
 
-  window.startEnemyTurn = () => {
-    startQTE((result) => {
+  window.startEnemyTurn = () => {{
       const damage = ennemyAttack(result, showMessage);
       playerHP -= damage;
       updateHP();
@@ -129,8 +132,12 @@ const createScene = function () {
         isPlayerTurn = true;
         updateArrow();
       }
-    });
+    };
   };
+
+  window.addEventListener("keydown", onKey => {
+    if (e.key === 'a' || e.key === 'A') window.endQTE();
+  });
 
   window.addEventListener('keydown', e => {
     if (e.key === 'a' || e.key === 'A') window.attackEnemy();
